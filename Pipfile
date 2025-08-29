@@ -16,6 +16,7 @@ drf-spectacular = "*"
 pytest-django = "*"
 geopy = "*"
 python-dotenv = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
