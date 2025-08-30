@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import structlog
+from datetime import timedelta
 
 load_dotenv()
 
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'core',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -151,8 +153,21 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {'anon': '10/minute'},
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'DEFAULT_VERSION': 'v1',
+    'EXCEPTION_HANDLER': 'core.exceptions.handlers.custom_exception_handler',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
 }
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+}
 # Django logging configuration
 LOGGING = {
     'version': 1,
