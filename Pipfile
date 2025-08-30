@@ -17,6 +17,7 @@ pytest-django = "*"
 geopy = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
