@@ -20,10 +20,27 @@ class TripViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
+        from core.utils.geocode import geocode_location
         serializer = TripSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)  # validate fields
+        serializer.is_valid(raise_exception=True)
         trip = TripService.create_trip(request.user, serializer.validated_data)
-        return Response(TripSerializer(trip).data, status=status.HTTP_201_CREATED)
+        # Geocode locations
+        current_coords = geocode_location(trip.current_location)
+        pickup_coords = geocode_location(trip.pickup_location)
+        dropoff_coords = geocode_location(trip.dropoff_location)
+        trip_data = {
+            'currentLocation': trip.current_location,
+            'pickupLocation': trip.pickup_location,
+            'dropoffLocation': trip.dropoff_location,
+            'currentCycleHours': trip.cycle_hours_used,
+            'coordinates': {
+                'current': list(current_coords),
+                'pickup': list(pickup_coords),
+                'dropoff': list(dropoff_coords),
+            },
+            'routeData': None,  # Add route data if available
+        }
+        return Response(trip_data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None):
         trip = TripService.get_trip(pk)

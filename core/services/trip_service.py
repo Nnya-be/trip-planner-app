@@ -12,7 +12,7 @@ class TripService:
             current_location=data.get("current_location"),
             pickup_location=data["pickup_location"],
             dropoff_location=data["dropoff_location"],
-            cycle_hours_used=data.get("cycle_hours_used", 0),
+            cycle_hours_used=data.get("cycle_hours_used"),
         )
 
     @staticmethod
