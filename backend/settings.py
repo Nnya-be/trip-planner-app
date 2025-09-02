@@ -3,6 +3,7 @@ Django settings for backend project.
 """
 
 from pathlib import Path
+import os
 import environ
 import structlog
 from datetime import timedelta
@@ -166,3 +167,9 @@ structlog.configure(
     wrapper_class=structlog.stdlib.BoundLogger,
     cache_logger_on_first_use=True,
 )
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
