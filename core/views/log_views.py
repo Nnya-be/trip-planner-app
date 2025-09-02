@@ -7,6 +7,26 @@ from core.services.log_service import LogService
 
 
 class DailyLogViewSet(viewsets.ViewSet):
+    def compliant_log(self, request):
+        """
+        Returns FMCSA-compliant log for a given trip and date.
+        Expects query params: trip_id, date (YYYY-MM-DD)
+        """
+        trip_id = request.query_params.get('trip_id')
+        log_date = request.query_params.get('date')
+        if not trip_id or not log_date:
+            return Response({"error": "trip_id and date are required."}, status=status.HTTP_400_BAD_REQUEST)
+        from core.models import Trip
+        from datetime import datetime
+        try:
+            trip = Trip.objects.get(id=trip_id)
+            log_date_obj = datetime.strptime(log_date, "%Y-%m-%d").date()
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        log_data = LogService.generate_compliant_log(trip, log_date_obj)
+        if not log_data:
+            return Response({"error": "No log found for this trip and date."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(log_data)
     permission_classes = [IsAuthenticated]
 
     def list(self, request):

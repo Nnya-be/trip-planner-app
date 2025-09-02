@@ -23,6 +23,6 @@ router.register(r"dispatchers", DispatcherProfileViewSet, basename="dispatcherpr
 
 
 urlpatterns = [
-    # Add views later
+    path("logs/compliant_log/", DailyLogViewSet.as_view({"get": "compliant_log"}), name="compliant-log"),
     path("", include(router.urls)),
 ]
