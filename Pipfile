@@ -19,6 +19,7 @@ python-dotenv = "*"
 psycopg2-binary = "*"
 djangorestframework-simplejwt = "*"
 django-environ = "*"
+gunicorn = "*"
 
 [dev-packages]
 
